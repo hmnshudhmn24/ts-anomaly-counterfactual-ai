@@ -1,53 +1,130 @@
-# 🕵️‍♂️ Time-Series Anomaly Detector with Counterfactual Analysis
 
-An explainable time-series monitoring dashboard using **NeuralProphet** for forecasting and a residual-based detector for anomalies. The app lets you:
+# 📈🚨 Time-Series Anomaly Detector with Counterfactual Analysis
 
-- Train or load a NeuralProphet model 📚  
-- Detect anomalous points via residual z-score (configurable threshold) 🚨  
-- Produce a **counterfactual (repaired)** series where anomalies are replaced with model forecasts 🔁  
-- Explain anomalies by showing model components (trend, seasonalities) and top contributing components 🧭  
-- Interactively explore data via a **Streamlit** dashboard 📊
+An interactive **time-series anomaly detection dashboard** powered by **NeuralProphet**.  
+This tool not only detects anomalies but also **explains why** a point is anomalous using **counterfactual comparisons** to expected (normal) behavior.  
 
----
+🔮 Perfect for showcasing skills in **time-series forecasting, anomaly detection, explainable AI, and dashboard development**!
 
-## Quickstart 🚀
 
-```bash
-python -m venv .venv
-source .venv/bin/activate    # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
 
-# Run the Streamlit dashboard
-streamlit run app.py
-```
+## ✨ Features
 
-### Files included
+- 📊 **Time-Series Forecasting** with NeuralProphet
+- 🚨 **Automatic anomaly detection** using deviation from forecasted values
+- 🔍 **Counterfactual explanations** → compare anomalous points with their expected “normal” counterparts
+- 🖥 **Streamlit dashboard** for interactive data exploration and visualization
+- 🧪 Includes **synthetic demo dataset** (energy-style data with injected anomalies)
+- 🛠 Modular code with `src/` for easy extension and training on real datasets
+
+
+
+## 📂 Project Structure
+
 ```
 ts-anomaly-counterfactual-ai/
 ├─ app.py                 # Streamlit dashboard (UI)
-├─ requirements.txt
+├─ requirements.txt       # dependencies
 ├─ src/
 │  ├─ model.py            # NeuralProphet training, save/load helpers
-│  ├─ detect.py           # anomaly detection, counterfactual creation, explanations
-│  └─ utils.py            # synthetic dataset generator & helper IO
-├─ demo_data.csv          # small synthetic demo dataset (optional)
-└─ README.md
+│  ├─ detect.py           # anomaly detection + counterfactual creation
+│  └─ utils.py            # synthetic dataset generator & IO helpers
+├─ demo_data.csv          # small synthetic demo dataset
+└─ README.md              # project documentation
 ```
 
-## How it works (short)
-1. Train NeuralProphet on your series (one-step forecasting).  
-2. Compute residuals `y - yhat1` and z-score them.  
-3. Flag anomalies where `|z| >= threshold`.  
-4. Create a counterfactual series by replacing anomalies with `yhat1`.  
-5. Explain anomalies by reporting top model component contributions and residual magnitude.
 
----
 
-## Notes & Extensions
-- If NeuralProphet is hard to install on your platform, try running on Colab or use an alternative (Prophet, PyCaret, or a simple ARIMA).  
-- For production, consider streaming ingestion, robust detectors (MAD/IsolationForest), and automatic alerting.  
+## 🚀 Getting Started
 
----
+### 1️⃣ Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-## License
-MIT — adapt and extend! ⭐
+### 2️⃣ Train or load model
+```bash
+python -m src.model --train --data demo_data.csv --save models/demo_model.pkl
+```
+
+### 3️⃣ Run anomaly detection
+```bash
+python -m src.detect --data demo_data.csv --model models/demo_model.pkl
+```
+
+### 4️⃣ Launch Streamlit dashboard
+```bash
+streamlit run app.py
+```
+
+
+
+## 🖼 Dashboard Preview
+
+The dashboard provides:  
+- 📈 Raw data vs Forecast  
+- 🚨 Highlighted anomalies  
+- 🔍 Counterfactual values (expected “normal” behavior for anomaly points)  
+
+Example visualization:  
+
+✅ Normal data → follows forecast  
+⚠️ Anomaly → flagged with red markers, counterfactual values shown as dashed lines
+
+
+
+## 🧩 How It Works
+
+1. **Model Training**  
+   - NeuralProphet is trained on time-series data  
+   - Captures seasonality + trend  
+
+2. **Forecasting**  
+   - Predicts expected values for each timestamp  
+
+3. **Anomaly Detection**  
+   - If `|observed - forecast| > threshold`, flag as anomaly  
+
+4. **Counterfactual Explanation**  
+   - Replaces anomaly with forecasted value  
+   - Displays side-by-side: “observed vs expected”
+
+
+
+## 📊 Example (Synthetic Energy Data)
+
+| Date       | Observed | Forecast | Anomaly | Counterfactual |
+|------------|----------|----------|---------|----------------|
+| 2023-05-10 | 420      | 310      | ✅ Yes  | 310            |
+| 2023-05-11 | 305      | 298      | ❌ No   | -              |
+| 2023-05-12 | 480      | 315      | ✅ Yes  | 315            |
+
+
+
+## 🛠 Tech Stack
+
+- 🧠 **NeuralProphet** → forecasting backbone
+- 🔎 **Counterfactual analysis** → explainability
+- 📊 **Pandas + Matplotlib/Plotly** → data visualization
+- 🎛 **Streamlit** → interactive dashboard
+- 🐍 **Python** (3.8+)
+
+
+
+## 📌 Use Cases
+
+- ⚡ **Energy usage monitoring** (detect unusual spikes in consumption)
+- 🏭 **Industrial IoT** (monitor sensor readings for faults)
+- 💰 **Finance** (flag suspicious trading volumes or stock anomalies)
+- 🏥 **Healthcare** (detect abnormal patient vitals)
+
+
+
+## 🧪 Next Steps
+
+- ✅ Add **real-world datasets** (energy, stock market, IoT sensors)
+- ✅ Improve counterfactuals with **autoencoder-based reconstructions**
+- 🔜 Deploy dashboard as **web app (Heroku/Streamlit Cloud)**
+- 🔜 Integrate with **alerts/notifications** (email/Slack)
+
+
